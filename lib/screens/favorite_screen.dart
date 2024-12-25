@@ -1,4 +1,3 @@
-// import 'package:et_books/config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:et_books/providers/favorite_book_provider.dart';

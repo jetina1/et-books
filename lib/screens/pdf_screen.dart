@@ -6,8 +6,15 @@ import 'package:flutter/services.dart'; // For portrait mode lock
 
 class PdfScreen extends StatefulWidget {
   final String pdfUrl;
+  final int bookId;
+  final int userId;
 
-  const PdfScreen({super.key, required this.pdfUrl});
+  const PdfScreen({
+    super.key,
+    required this.pdfUrl,
+    required this.bookId,
+    required this.userId,
+  });
 
   @override
   _PdfScreenState createState() => _PdfScreenState();
@@ -31,6 +38,8 @@ class _PdfScreenState extends State<PdfScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    // print(
+    // 'pdfUrl*************************************************************************************************************************: ${widget.pdfUrl}');
 
     downloadPdf();
   }
@@ -46,14 +55,11 @@ class _PdfScreenState extends State<PdfScreen> {
     try {
       final dio = Dio();
       final dir = await getTemporaryDirectory(); // Use a temporary directory
-      final filePath = '${dir.path}/temp.pdf';
-      print(
-          'pdffffffffffffffffffffffff pathhhhhhhhhhhhhhhhhhh********************');
-      print(widget.pdfUrl);
+      final filePath = '${dir.path}/temp_${widget.bookId}.pdf';
+
       // Download the PDF
       await dio.download(widget.pdfUrl, filePath);
 
-      // Update state to show the PDF
       setState(() {
         localFilePath = filePath;
         isLoading = false;
@@ -69,13 +75,13 @@ class _PdfScreenState extends State<PdfScreen> {
   void toggleMode(String mode) {
     setState(() {
       if (mode == 'Reading Mode') {
-        backgroundColor = Colors.white; // Light background for reading
-        textColor = Colors.black; // Dark text for readability
-        pdfViewColor = Colors.white; // Light PDF background
+        backgroundColor = Colors.white;
+        textColor = Colors.black;
+        pdfViewColor = Colors.white;
       } else if (mode == 'Night Light') {
-        backgroundColor = Colors.black; // Dark background
-        textColor = Colors.yellow; // Yellow text to reduce eye strain
-        pdfViewColor = Colors.black; // Dark PDF background
+        backgroundColor = Colors.black;
+        textColor = Colors.yellow;
+        pdfViewColor = Colors.black;
       }
     });
   }
@@ -85,14 +91,14 @@ class _PdfScreenState extends State<PdfScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Book PDF',
+          'Book PDF - Book ID: ${widget.bookId}, User ID: ${widget.userId}',
           style: TextStyle(
-            color: textColor, // Dynamic text color
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: backgroundColor, // Dynamic background color
-        iconTheme: IconThemeData(color: textColor), // Dynamic icon color
+        backgroundColor: backgroundColor,
+        iconTheme: IconThemeData(color: textColor),
         actions: [
           PopupMenuButton<String>(
             onSelected: toggleMode,
@@ -111,25 +117,20 @@ class _PdfScreenState extends State<PdfScreen> {
         ],
       ),
       body: Container(
-        color: backgroundColor, // Dynamic body background
+        color: backgroundColor,
         child: isLoading
             ? Center(
-                child: CircularProgressIndicator(
-                  color: textColor, // Dynamic loading indicator color
-                ),
+                child: CircularProgressIndicator(color: textColor),
               )
             : localFilePath == null
                 ? Center(
                     child: Text(
                       "Failed to load PDF.",
-                      style: TextStyle(
-                        color: textColor, // Dynamic text color
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: textColor, fontSize: 16),
                     ),
                   )
                 : Container(
-                    color: pdfViewColor, // Dynamic PDFView background
+                    color: pdfViewColor,
                     child: PDFView(
                       filePath: localFilePath,
                       enableSwipe: true,

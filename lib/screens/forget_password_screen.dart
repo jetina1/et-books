@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:et_books/config.dart';$apiUrl
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Controllers for the text fields
     final TextEditingController emailController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
     final TextEditingController confirmPasswordController =
@@ -95,7 +93,6 @@ class ForgotPasswordScreen extends StatelessWidget {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // Implement the password reset functionality here
                 if (newPasswordController.text ==
                     confirmPasswordController.text) {
                   ScaffoldMessenger.of(context).showSnackBar(
